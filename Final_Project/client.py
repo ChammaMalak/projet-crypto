@@ -27,7 +27,7 @@ def receive_messages(sock, key):
         except:
             break
 
-HOST = '192.168.100.5'  # Replace with your PC's IP
+HOST = '192.168.100.137'  # Replace with your PC's IP
 PORT = 12345
 KEY = 3
 
