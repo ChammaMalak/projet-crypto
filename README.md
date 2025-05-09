@@ -1,6 +1,6 @@
 # 🔐 Cryptography Project
 
-This project implements several cryptographic algorithms across three main categories: **classical**, **symmetric**, and **asymmetric cryptography**. It also includes a final mini-project for **secure communication** using **Wi-Fi sockets** (with Caesar and AES encryption) and a basic GUI.
+This project implements several cryptographic algorithms across three main categories: classical, symmetric, and asymmetric cryptography. It also includes a final mini-project for **secure communication** using **Wi-Fi sockets** (with Caesar and AES encryption) and a basic GUI.
 
 ---
 
@@ -9,10 +9,10 @@ This project implements several cryptographic algorithms across three main categ
 ```
 cryptography_project/
 │
-├── gui.py               # Optional graphical interface
-├── main.py              # Entry point if using GUI
+├── gui.py                  # Optional graphical interface
+├── main.py                 # Entry point if using GUI
 │
-├── TP1_classic/         # Classical Cryptography Algorithms
+├── TP1_classic/            # Classical Cryptography Algorithms
 │   ├── affine.py
 │   ├── cesar.py
 │   ├── hill.py
@@ -25,21 +25,21 @@ cryptography_project/
 │       ├── index_of_coincidence.py
 │       └── kasiski.py
 │
-├── TP2_symmetric/       # Symmetric Key Algorithms
+├── TP2_symmetric/          # Symmetric Key Algorithms
 │   ├── aes.py
 │   ├── des.py
 │   ├── rc4.py
 │
-├── TP3_asymmetric/      # Asymmetric Key Algorithms
+├── TP3_asymmetric/         # Asymmetric Key Algorithms
 │   ├── rsa.py
 │   ├── elgamal.py
 │   └── diffie_hellman.py
 │
-├── Final_Project/       # Real-time encrypted communication
-│   ├── client.py        # Caesar cipher chat client
-│   ├── server.py        # Caesar cipher chat server
-│   ├── client2.py       # AES encrypted client
-│   └── server2.py       # AES encrypted server
+├── Final_Project/          # Real-time encrypted communication
+│   ├── client.py           # Caesar cipher chat client
+│   ├── server.py           # Caesar cipher chat server
+│   ├── client2.py          # AES encrypted client
+│   └── server2.py          # AES encrypted server
 │
 └── README.md
 ```
@@ -48,7 +48,7 @@ cryptography_project/
 
 ## ⚙️ Requirements
 
-Ensure Python 3.6+ is installed. Then, install the required libraries:
+Ensure Python 3.6+ is installed. Then, install required libraries:
 
 ```bash
 pip install pycryptodome
@@ -72,11 +72,7 @@ The `cryptanalysis/` folder contains tools like:
 - Index of coincidence
 - Kasiski method
 
----
-
 ### 🔐 Symmetric Algorithms (TP2)
-
-Run the symmetric key algorithms:
 
 ```bash
 cd TP2_symmetric
@@ -85,11 +81,7 @@ python des.py
 python rc4.py
 ```
 
----
-
 ### 🔑 Asymmetric Algorithms (TP3)
-
-Run the asymmetric key algorithms:
 
 ```bash
 cd TP3_asymmetric
@@ -100,45 +92,49 @@ python diffie_hellman.py
 
 ---
 
-### 📡 Final Project: Secure Wi-Fi Communication
+## 📡 Final Project: Secure Wi-Fi Communication
 
-#### 🔁 Caesar Cipher Chat
+### 🔁 Caesar Cipher Chat
 
-1. Run on PC:
-    ```bash
-    cd Final_Project
-    python server.py
-    ```
+- Run on **PC**:
 
-2. Run on Phone (or another device in the same Wi-Fi):
-    ```bash
-    python client.py
-    ```
+```bash
+cd Final_Project
+python server.py
+```
 
-📌 **Note:** Edit `HOST` in `client.py` to your PC's IP address (e.g., `192.168.1.X`).
+- Run on **Phone** (or another device in same Wi-Fi):
 
----
+```bash
+python client.py
+```
 
-#### 🛡️ AES Encrypted Chat
-
-1. Run on PC:
-    ```bash
-    cd Final_Project
-    python server2.py
-    ```
-
-2. Run on Phone:
-    ```bash
-    python client2.py
-    ```
-
-📌 **Note:** Edit `HOST` in `client2.py` to your PC's IP address.
+📌 Edit `HOST` in `client.py` to your PC's IP address (e.g., `192.168.1.X`)
 
 ---
 
-### 🧰 Optional: GUI
+### 🛡️ AES Encrypted Chat
 
-If `gui.py` and `main.py` are connected to algorithm execution, run:
+- Run on **PC**:
+
+```bash
+cd Final_Project
+python server2.py
+```
+
+- Run on **Phone**:
+
+```bash
+python client2.py
+```
+
+📌 Edit `HOST` in `client2.py` to your PC's IP address.
+
+---
+
+## 🧰 Optional: GUI
+
+If `gui.py` and `main.py` are connected to algorithm execution:
 
 ```bash
 python main.py
@@ -153,9 +149,3 @@ python main.py
 - Python 3.10
 - pycryptodome 3.18+
 
----
-
-## 📬 Author
-
-**Sirine** — Cybersecurity Engineering Student  
-Project for Cryptography Module - 2025
