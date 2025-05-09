@@ -33,7 +33,7 @@ def elgamal_decrypt(private_key, a, b, p):
     decrypted = [chr((char * s_inv) % p) for char in b]
     return ''.join(decrypted)
 
-def main():
+if __name__ == "__main__":
     print("\n--- ElGamal Encryption/Decryption ---")
 
     p = 467  # Prime number
@@ -54,6 +54,3 @@ def main():
     decrypted = elgamal_decrypt(private_key, a, b, p)
     print("\nDecrypted:")
     print(" ", decrypted)
-
-if __name__ == "__main__":
-    main()

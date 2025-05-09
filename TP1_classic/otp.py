@@ -1,11 +1,9 @@
-from ast import main
 import random
 import string
 
 def generate_random_key(length):
     """Génère une clé aléatoire de lettres majuscules de longueur égale au message."""
     return ''.join(random.choice(string.ascii_uppercase) for _ in range(length))
-
 
 def encrypt(plaintext, key, preserve_spaces=False):
     """Chiffre le message avec la clé par addition mod 26 (lettres A-Z)."""
@@ -20,7 +18,6 @@ def encrypt(plaintext, key, preserve_spaces=False):
 
     return ciphertext
 
-
 def decrypt(ciphertext, key, preserve_spaces=False):
     """Déchiffre le message chiffré avec la clé (soustraction mod 26)."""
     plaintext = ""
@@ -33,23 +30,11 @@ def decrypt(ciphertext, key, preserve_spaces=False):
 
     return plaintext
 
+# Fonctions à utiliser depuis main.py
+def otp_encrypt(message, preserve_spaces=False):
+    key = generate_random_key(len(message.replace(" ", "")) if not preserve_spaces else len(message))
+    ciphertext = encrypt(message, key, preserve_spaces)
+    return ciphertext, key
 
-# Exemple d'utilisation
-if __name__ == "__main__":
-    message = input("Enter the message to encrypt (no spaces allowed for OTP): ")
-    preserve_spaces = input("Would you like to preserve spaces (yes/no)? ").lower() == 'yes'
-    
-    if len(message) == 0:
-        print("Message cannot be empty!")
-    else:
-        key = generate_random_key(len(message))
-        print(f"Message original: {message}")
-        print(f"Random key: {key}")
-
-        encrypted = encrypt(message, key, preserve_spaces)
-        print(f"Encrypted message: {encrypted}")
-
-        decrypted = decrypt(encrypted, key, preserve_spaces)
-        print(f"Decrypted message: {decrypted}")
-if __name__ == "__main__":
-    main()
+def otp_decrypt(ciphertext, key, preserve_spaces=False):
+    return decrypt(ciphertext, key, preserve_spaces)

@@ -5,12 +5,14 @@ from Crypto.Util.Padding import pad, unpad
 key = b'16byteslongkey!!'
 
 def aes_encrypt(plaintext):
+    """Encrypts plaintext (string) using AES-128 ECB mode. Returns bytes."""
     cipher = AES.new(key, AES.MODE_ECB)
     padded_text = pad(plaintext.encode(), AES.block_size)
     ciphertext = cipher.encrypt(padded_text)
     return ciphertext
 
 def aes_decrypt(ciphertext):
+    """Decrypts ciphertext (bytes) using AES-128 ECB mode. Returns string."""
     cipher = AES.new(key, AES.MODE_ECB)
     decrypted = unpad(cipher.decrypt(ciphertext), AES.block_size)
     return decrypted.decode()

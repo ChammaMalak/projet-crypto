@@ -34,79 +34,313 @@ def main():
 def classical_menu():
     print("\n-- Classical Algorithms --")
     options = {
-        '1': "affine",
-        '2': "cesar",
-        '3': "hill",
-        '4': "otp",
-        '5': "playfair",
-        '6': "substitution",
-        '7': "vigenere",
-        '8': "cryptanalysis.frequency_analysis",
-        '9': "cryptanalysis.index_of_coincidence",
-        '10': "cryptanalysis.kasiski"
+        '1': ("Affine", affine),
+        '2': ("Cesar", cesar),
+        '3': ("Hill", hill),
+        '4': ("OTP", otp),
+        '5': ("Playfair", playfair),
+        '6': ("Substitution", substitution),
+        '7': ("Vigenere", vigenere),
+        '8': ("Frequency Analysis", frequency_analysis),
+        '9': ("Index of Coincidence", index_of_coincidence),
+        '10': ("Kasiski", kasiski)
     }
 
-    for key, val in options.items():
-        print(f"{key}. {val.replace('_', ' ').title()}")
+    for key, (name, _) in options.items():
+        print(f"{key}. {name}")
 
     choice = input("Choose an algorithm: ")
     if choice in options:
-        run_module(f"TP1_classic.{options[choice]}")
+        name, module = options[choice]
+        if name == "Affine":
+            affine_menu()
+        elif name == "Cesar":
+            cesar_menu()
+        elif name == "Hill":
+            hill_menu()
+        elif name == "OTP":
+            otp_menu()
+        elif name == "Playfair":
+            playfair_menu()
+        elif name == "Substitution":
+            substitution_menu()
+        elif name == "Vigenere":
+            vigenere_menu()
+        elif name in ["Frequency Analysis", "Index of Coincidence", "Kasiski"]:
+            if hasattr(module, "main"):
+                module.main()
+            else:
+                print(f"{name} does not have a main() function.")
+        else:
+            print(f"Module for {name} not implemented in this menu.")
     else:
         print("Invalid choice.")
+
+def affine_menu():
+    print("\n-- Affine Cipher --")
+    action = input("Encrypt (e) or Decrypt (d)? ").lower()
+    if action in ['e', 'd']:
+        text = input("Enter text: ")
+        while True:
+            try:
+                a = int(input("Enter key 'a' (coprime with 26, integer): "))
+                break
+            except ValueError:
+                print("Key 'a' must be an integer. Please try again.")
+        while True:
+            try:
+                b = int(input("Enter key 'b' (integer): "))
+                break
+            except ValueError:
+                print("Key 'b' must be an integer. Please try again.")
+        try:
+            if action == 'e':
+                result = affine.affine_encrypt(text, a, b)
+                print(f"Ciphertext: {result}")
+            else:
+                result = affine.affine_decrypt(text, a, b)
+                print(f"Plaintext: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
+    else:
+        print("Invalid action.")
+
+def cesar_menu():
+    print("\n-- Cesar Cipher --")
+    action = input("Encrypt (e) or Decrypt (d)? ").lower()
+    if action in ['e', 'd']:
+        text = input("Enter text: ")
+        while True:
+            try:
+                key = int(input("Enter key (integer): "))
+                break
+            except ValueError:
+                print("Key must be an integer. Please try again.")
+        try:
+            if action == 'e':
+                result = cesar.cesar_encrypt(text, key)
+                print(f"Ciphertext: {result}")
+            else:
+                result = cesar.cesar_decrypt(text, key)
+                print(f"Plaintext: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
+    else:
+        print("Invalid action.")
+
+def otp_menu():
+    print("\n-- OTP Cipher --")
+    action = input("Encrypt (e) or Decrypt (d)? ").lower()
+    if action == 'e':
+        text = input("Enter plaintext: ")
+        ciphertext, key = otp.otp_encrypt(text)
+        print(f"Ciphertext: {ciphertext}")
+        print(f"Key: {key}")
+    elif action == 'd':
+        ciphertext = input("Enter ciphertext: ")
+        key = input("Enter key: ")
+        result = otp.otp_decrypt(ciphertext, key)
+        print(f"Plaintext: {result}")
+    else:
+        print("Invalid action.")
+
+def playfair_menu():
+    print("\n-- Playfair Cipher --")
+    action = input("Encrypt (e) or Decrypt (d)? ").lower()
+    key = input("Enter key (default MONARCHY): ") or "MONARCHY"
+    if action == 'e':
+        text = input("Enter plaintext: ")
+        result = playfair.playfair_encrypt(text, key)
+        print(f"Ciphertext: {result}")
+    elif action == 'd':
+        ciphertext = input("Enter ciphertext: ")
+        result = playfair.playfair_decrypt(ciphertext, key)
+        print(f"Plaintext: {result}")
+    else:
+        print("Invalid action.")
+
+def substitution_menu():
+    print("\n-- Substitution Cipher --")
+    action = input("Encrypt (e) or Decrypt (d)? ").lower()
+    if action == 'e':
+        text = input("Enter plaintext: ")
+        key = substitution.generate_random_alphabet()
+        print(f"Random key used: {key}")
+        result = substitution.substitution_encrypt(text, key)
+        print(f"Ciphertext: {result}")
+    elif action == 'd':
+        ciphertext = input("Enter ciphertext: ")
+        key = input("Enter key (26-letter permutation): ")
+        try:
+            substitution.validate_key(key)
+            result = substitution.substitution_decrypt(ciphertext, key)
+            print(f"Plaintext: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
+    else:
+        print("Invalid action.")
+
+def vigenere_menu():
+    print("\n-- Vigenere Cipher --")
+    action = input("Encrypt (e) or Decrypt (d)? ").lower()
+    key = input("Enter key (letters only): ")
+    if action == 'e':
+        text = input("Enter plaintext: ")
+        try:
+            result = vigenere.vigenere_encrypt(text, key)
+            print(f"Ciphertext: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
+    elif action == 'd':
+        ciphertext = input("Enter ciphertext: ")
+        try:
+            result = vigenere.vigenere_decrypt(ciphertext, key)
+            print(f"Plaintext: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
+    else:
+        print("Invalid action.")
+
+def hill_menu():
+    print("\n-- Hill Cipher --")
+    action = input("Encrypt (e) or Decrypt (d)? ").lower()
+    if action == 'e':
+        message = input("Enter plaintext: ")
+        try:
+            result = hill.hill_encrypt(message)
+            print(f"Ciphertext: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
+    elif action == 'd':
+        ciphertext = input("Enter ciphertext: ")
+        try:
+            result = hill.hill_decrypt(ciphertext)
+            print(f"Plaintext: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
+    else:
+        print("Invalid action.")
 
 def symmetric_menu():
     print("\n-- Symmetric Algorithms --")
     options = {
-        '1': "aes",
-        '2': "des",
-        '3': "rc4",
-        '4': "aes_finalists.serpent",
-        '5': "aes_finalists.twofish"
+        '1': ("AES", aes),
+        '2': ("DES", des),
+        '3': ("RC4", rc4)
     }
-
-    for key, val in options.items():
-        print(f"{key}. {val.upper()}")
-
+    for key, (name, _) in options.items():
+        print(f"{key}. {name}")
     choice = input("Choose an algorithm: ")
-    if choice in options:
-        run_module(f"TP2_symmetric.{options[choice]}")
+    if choice == '1':
+        print("\n--- AES (ECB mode) ---")
+        action = input("Encrypt (e) or Decrypt (d)? ").lower()
+        if action == 'e':
+            plaintext = input("Enter the plaintext: ")
+            encrypted = aes.aes_encrypt(plaintext)
+            print("Encrypted (hex):", encrypted.hex())
+        elif action == 'd':
+            hex_input = input("Enter the ciphertext (hex): ")
+            try:
+                ciphertext = bytes.fromhex(hex_input)
+                decrypted = aes.aes_decrypt(ciphertext)
+                print("Decrypted text:", decrypted)
+            except Exception as e:
+                print("Decryption failed:", e)
+        else:
+            print("Invalid option.")
+    elif choice == '2':
+        print("\n--- DES (ECB mode) ---")
+        action = input("Encrypt (e) or Decrypt (d)? ").lower()
+        if action == 'e':
+            plaintext = input("Enter the plaintext: ")
+            encrypted = des.des_encrypt(plaintext)
+            print("Encrypted (hex):", encrypted.hex())
+        elif action == 'd':
+            hex_input = input("Enter the ciphertext (hex): ")
+            try:
+                ciphertext = bytes.fromhex(hex_input)
+                decrypted = des.des_decrypt(ciphertext)
+                print("Decrypted text:", decrypted)
+            except Exception as e:
+                print("Decryption failed:", e)
+        else:
+            print("Invalid option.")
+    elif choice == '3':
+        print("\n--- RC4 Stream Cipher ---")
+        action = input("Encrypt (e) or Decrypt (d)? ").lower()
+        key = input("Enter the key: ")
+        if action == 'e':
+            plaintext = input("Enter the plaintext: ")
+            encrypted = rc4.rc4_encrypt(key, plaintext)
+            print("Encrypted (hex):", encrypted.hex())
+        elif action == 'd':
+            hex_input = input("Enter the ciphertext (hex): ")
+            try:
+                ciphertext = bytes.fromhex(hex_input)
+                decrypted = rc4.rc4_decrypt(key, ciphertext)
+                print("Decrypted text:", decrypted.decode('latin1'))
+            except Exception as e:
+                print("Decryption failed:", e)
+        else:
+            print("Invalid option.")
     else:
         print("Invalid choice.")
 
 def asymmetric_menu():
     print("\n-- Asymmetric Algorithms --")
     options = {
-        '1': "diffie_hellman",
-        '2': "elgamal",
-        '3': "rsa"
+        '1': ("Diffie-Hellman", diffie_hellman),
+        '2': ("ElGamal", elgamal),
+        '3': ("RSA", rsa)
     }
-
-    for key, val in options.items():
-        print(f"{key}. {val.upper()}")
-
+    for key, (name, _) in options.items():
+        print(f"{key}. {name}")
     choice = input("Choose an algorithm: ")
-    if choice in options:
-        run_module(f"TP3_asymmetric.{options[choice]}")
+    if choice == '1':
+        print("\n--- Diffie-Hellman Key Exchange ---")
+        try:
+            p = int(input("Enter prime p (default 23): ") or "23")
+            g = int(input("Enter generator g (default 5): ") or "5")
+            a = int(input("Enter Alice's private key a (default 6): ") or "6")
+            b = int(input("Enter Bob's private key b (default 15): ") or "15")
+            A, B, shared = diffie_hellman.diffie_hellman_key_exchange(p, g, a, b)
+            print(f"Alice's public key: {A}")
+            print(f"Bob's public key: {B}")
+            print(f"Shared secret: {shared}")
+        except Exception as e:
+            print("Error:", e)
+    elif choice == '2':
+        print("\n--- ElGamal Encryption/Decryption ---")
+        try:
+            p = int(input("Enter prime p (default 467): ") or "467")
+            msg = input("Enter message: ")
+            public_key, private_key = elgamal.elgamal_keygen(p)
+            print("Public Key:", public_key)
+            print("Private Key:", private_key)
+            a, b = elgamal.elgamal_encrypt(public_key, msg)
+            print("Encrypted a:", a)
+            print("Encrypted b:", b)
+            decrypted = elgamal.elgamal_decrypt(private_key, a, b, p)
+            print("Decrypted:", decrypted)
+        except Exception as e:
+            print("Error:", e)
+    elif choice == '3':
+        print("\n--- RSA Encryption/Decryption ---")
+        try:
+            p = int(input("Enter prime p (default 61): ") or "61")
+            q = int(input("Enter prime q (default 53): ") or "53")
+            public, private = rsa.generate_keypair(p, q)
+            print("Public Key:", public)
+            print("Private Key:", private)
+            msg = input("Enter message: ")
+            encrypted = rsa.encrypt(public, msg)
+            print("Encrypted:", encrypted)
+            decrypted = rsa.decrypt(private, encrypted)
+            print("Decrypted:", decrypted)
+        except Exception as e:
+            print("Error:", e)
     else:
         print("Invalid choice.")
 
-def run_module(module_path):
-    try:
-        # Dynamically import the module using its path
-        module = importlib.import_module(module_path)
-
-        # Check if the module has a 'main' function and run it
-        if hasattr(module, "main"):
-            print(f"Running module: {module_path}")
-            module.main()  # Call the main function inside the module
-        else:
-            print(f"Module '{module_path}' has no 'main()' function.")
-    except ModuleNotFoundError:
-        print(f"Module '{module_path}' not found.")
-    except Exception as e:
-        print(f"Error running module: {e}")
-
 if __name__ == "__main__":
     main()
-    

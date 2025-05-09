@@ -3,11 +3,9 @@ def ksa(key):
     key_length = len(key) 
     S = list(range(256)) 
     j = 0 
- 
     for i in range(256): 
         j = (j + S[i] + key[i % key_length]) % 256 
         S[i], S[j] = S[j], S[i] 
- 
     return S 
  
 def prga(S): 
@@ -24,7 +22,15 @@ def rc4(key, text):
     key = [ord(c) for c in key] 
     S = ksa(key) 
     keystream = prga(S) 
-    return bytes([ord(c) ^ next(keystream) for c in text]) 
+    return bytes([ord(c) ^ next(keystream) for c in text])
+
+def rc4_encrypt(key, plaintext):
+    """Encrypts plaintext (string) with RC4. Returns bytes."""
+    return rc4(key, plaintext)
+
+def rc4_decrypt(key, ciphertext):
+    """Decrypts ciphertext (bytes) with RC4. Returns bytes."""
+    return rc4(key, ciphertext)
 
 def main():
     print("\n--- RC4 Stream Cipher ---")
@@ -33,15 +39,15 @@ def main():
 
     if choice == 'E':
         plaintext = input("Enter the plaintext: ")
-        encrypted = rc4(key, plaintext)
+        encrypted = rc4_encrypt(key, plaintext)
         print("Encrypted (bytes):", encrypted)
         print("Encrypted (hex):", encrypted.hex())
     elif choice == 'D':
         hex_input = input("Enter the ciphertext (hex): ")
         try:
             ciphertext = bytes.fromhex(hex_input)
-            decrypted = rc4(key, ciphertext.decode('latin1'))
-            print("Decrypted text:", decrypted.decode('latin1'))
+            decrypted = rc4_decrypt(key, ciphertext).decode('latin1')
+            print("Decrypted text:", decrypted)
         except Exception as e:
             print("Decryption failed:", e)
     else:

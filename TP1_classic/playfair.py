@@ -1,4 +1,3 @@
-from ast import main
 import string
 
 def prepare_key(key):
@@ -12,7 +11,6 @@ def prepare_key(key):
             seen.add(char)
             matrix.append(char)
     return [matrix[i:i+5] for i in range(0, 25, 5)]
-
 
 def format_plaintext(text, preserve_spaces=False):
     """Formate le texte clair : enlève les espaces, double lettres, et sépare par paires."""
@@ -38,7 +36,6 @@ def format_plaintext(text, preserve_spaces=False):
 
     return [cleaned[i:i+2] for i in range(0, len(cleaned), 2)]
 
-
 def find_position(matrix, char):
     """Retourne la position (ligne, colonne) du caractère dans la matrice."""
     for row in range(5):
@@ -46,7 +43,6 @@ def find_position(matrix, char):
             if matrix[row][col] == char:
                 return row, col
     return None, None
-
 
 def encrypt_pair(matrix, a, b):
     """Chiffre une paire de lettres selon les règles de Playfair."""
@@ -63,7 +59,6 @@ def encrypt_pair(matrix, a, b):
         # Rectangle
         return matrix[row_a][col_b] + matrix[row_b][col_a]
 
-
 def decrypt_pair(matrix, a, b):
     """Déchiffre une paire de lettres selon les règles de Playfair."""
     row_a, col_a = find_position(matrix, a)
@@ -76,13 +71,11 @@ def decrypt_pair(matrix, a, b):
     else:
         return matrix[row_a][col_b] + matrix[row_b][col_a]
 
-
 def encrypt(plaintext, key, preserve_spaces=False):
     """Fonction principale de chiffrement Playfair."""
     matrix = prepare_key(key)
     pairs = format_plaintext(plaintext, preserve_spaces)
     return ''.join([encrypt_pair(matrix, a, b) for a, b in pairs])
-
 
 def decrypt(ciphertext, key, preserve_spaces=False):
     """Fonction principale de déchiffrement Playfair."""
@@ -95,19 +88,9 @@ def decrypt(ciphertext, key, preserve_spaces=False):
     
     return decrypted_text
 
+# Fonctions à utiliser depuis main.py
+def playfair_encrypt(message, key="MONARCHY", preserve_spaces=False):
+    return encrypt(message, key, preserve_spaces)
 
-# Exemple
-if __name__ == "__main__":
-    key = "MONARCHY"
-    message = input("Enter message for encryption (only letters, no special characters): ")
-    
-    # Option to preserve spaces
-    preserve_spaces = input("Would you like to preserve spaces in the decrypted message? (yes/no): ").strip().lower() == 'yes'
-
-    encrypted = encrypt(message, key, preserve_spaces)
-    print("Texte chiffré :", encrypted)
-
-    decrypted = decrypt(encrypted, key, preserve_spaces)
-    print("Texte déchiffré :", decrypted)
-if __name__ == "__main__":
-    main()
+def playfair_decrypt(ciphertext, key="MONARCHY", preserve_spaces=False):
+    return decrypt(ciphertext, key, preserve_spaces)

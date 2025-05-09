@@ -56,25 +56,3 @@ def encrypt(pk, plaintext):
 def decrypt(pk, ciphertext):
     key, n = pk
     return ''.join([chr(pow(char, key, n)) for char in ciphertext])
-
-def main():
-    print("\n--- RSA Encryption/Decryption ---")
-    p = 61
-    q = 53
-    message = "HELLO"
-
-    print(f"Original Message: {message}")
-    public, private = generate_keypair(p, q)
-
-    print("\nKeys:")
-    print("  Public Key:", public)
-    print("  Private Key:", private)
-
-    encrypted = encrypt(public, message)
-    print("\nEncrypted:", encrypted)
-
-    decrypted = decrypt(private, encrypted)
-    print("Decrypted:", decrypted)
-
-if __name__ == "__main__":
-    main()

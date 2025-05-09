@@ -1,4 +1,3 @@
-from ast import main
 import string
 import random
 
@@ -7,7 +6,6 @@ def generate_random_alphabet():
     alphabet = list(string.ascii_uppercase)
     random.shuffle(alphabet)
     return ''.join(alphabet)
-
 
 def validate_key(key):
     """Vérifie si la clé est une permutation valide de l'alphabet."""
@@ -19,42 +17,29 @@ def validate_key(key):
         raise ValueError("La clé doit être composée uniquement de lettres.")
     return True
 
-
 def substitution_encrypt(plaintext, key):
     """Chiffre le texte clair en utilisant la clé de substitution."""
     plaintext = plaintext.upper().replace(" ", "")  # Conversion en majuscules et suppression des espaces
     ciphertext = ""
-    
-    # Créer un dictionnaire de substitution basé sur la clé
     substitution_dict = {string.ascii_uppercase[i]: key[i] for i in range(26)}
-
-    # Substitution de chaque caractère du texte clair
     for char in plaintext:
-        if char.isalpha():  # Ne traiter que les lettres
+        if char.isalpha():
             ciphertext += substitution_dict[char]
         else:
-            ciphertext += char  # Gérer les caractères non alphabétiques (espaces, etc.)
-
+            ciphertext += char
     return ciphertext
-
 
 def substitution_decrypt(ciphertext, key):
     """Déchiffre le texte chiffré en utilisant la clé de substitution."""
-    ciphertext = ciphertext.upper().replace(" ", "")  # Conversion en majuscules et suppression des espaces
+    ciphertext = ciphertext.upper().replace(" ", "")
     plaintext = ""
-
-    # Créer un dictionnaire de déchiffrement basé sur la clé
     reverse_substitution_dict = {key[i]: string.ascii_uppercase[i] for i in range(26)}
-
-    # Substitution inverse de chaque caractère du texte chiffré
     for char in ciphertext:
-        if char.isalpha():  # Ne traiter que les lettres
+        if char.isalpha():
             plaintext += reverse_substitution_dict[char]
         else:
-            plaintext += char  # Gérer les caractères non alphabétiques
-
+            plaintext += char
     return plaintext
-
 
 # Exemple d'utilisation
 if __name__ == "__main__":
@@ -77,5 +62,3 @@ if __name__ == "__main__":
 
     decrypted = substitution_decrypt(encrypted, key)
     print("Texte déchiffré :", decrypted)
-if __name__ == "__main__":
-    main()

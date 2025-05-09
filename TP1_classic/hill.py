@@ -1,10 +1,7 @@
-from ast import main
 import numpy as np
 
 def mod_inverse_matrix(matrix, modulus):
-    """
-    Calcule l'inverse d'une matrice modulo 26 (nécessaire pour le déchiffrement).
-    """
+    """Calcule l'inverse d'une matrice modulo 26 (nécessaire pour le déchiffrement)."""
     det = int(round(np.linalg.det(matrix)))
     det_inv = pow(det, -1, modulus)  # Calculate modular inverse of determinant
     if det_inv == 0:
@@ -14,16 +11,13 @@ def mod_inverse_matrix(matrix, modulus):
     )
     return matrix_mod_inv
 
-
 def text_to_numbers(text):
     """Convertit un texte en liste de nombres (A=0, B=1, ..., Z=25)."""
     return [ord(char) - ord('A') for char in text.upper() if char.isalpha()]
 
-
 def numbers_to_text(numbers):
     """Convertit une liste de nombres en texte (0=A, ..., 25=Z)."""
     return ''.join([chr(num % 26 + ord('A')) for num in numbers])
-
 
 def pad_text(text, block_size, pad_char='X'):
     """Ajoute des caractères de padding à la fin si le texte n'est pas un multiple de la taille du bloc."""
@@ -32,11 +26,8 @@ def pad_text(text, block_size, pad_char='X'):
         text += pad_char
     return text
 
-
 def encrypt(plaintext, key_matrix):
-    """
-    Chiffre le texte avec l'algorithme de Hill.
-    """
+    """Chiffre le texte avec l'algorithme de Hill."""
     block_size = key_matrix.shape[0]
     plaintext = pad_text(plaintext, block_size)
     numbers = text_to_numbers(plaintext)
@@ -49,11 +40,8 @@ def encrypt(plaintext, key_matrix):
 
     return numbers_to_text(ciphertext)
 
-
 def decrypt(ciphertext, key_matrix):
-    """
-    Déchiffre le texte chiffré avec l'algorithme de Hill.
-    """
+    """Déchiffre le texte chiffré avec l'algorithme de Hill."""
     block_size = key_matrix.shape[0]
     numbers = text_to_numbers(ciphertext)
     plaintext = []
@@ -70,18 +58,15 @@ def decrypt(ciphertext, key_matrix):
 
     return numbers_to_text(plaintext)
 
+# Fonctions à utiliser depuis main.py
+def hill_encrypt(message, key=None):
+    """Interface pour chiffrer avec Hill depuis main.py"""
+    if key is None:
+        key = np.array([[3, 3], [2, 5]])
+    return encrypt(message, key)
 
-# Exemple d'utilisation
-if __name__ == "__main__":
-    # Clé 2x2 : doit être inversible modulo 26
-    key = np.array([[3, 3], [2, 5]])
-
-    message = "HELLO"
-    encrypted = encrypt(message, key)
-    print("Texte chiffré :", encrypted)
-
-    decrypted = decrypt(encrypted, key)
-    print("Texte déchiffré :", decrypted)
-
-if __name__ == "__main__":
-    main()
+def hill_decrypt(ciphertext, key=None):
+    """Interface pour déchiffrer avec Hill depuis main.py"""
+    if key is None:
+        key = np.array([[3, 3], [2, 5]])
+    return decrypt(ciphertext, key)

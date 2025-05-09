@@ -1,6 +1,33 @@
 from ast import main
 
 
+def caesar_encrypt(plaintext, shift):
+    """Chiffre le texte clair avec le chiffrement de César."""
+    plaintext = plaintext.upper()
+    ciphertext = ""
+    for char in plaintext:
+        if char.isalpha():
+            x = ord(char) - ord('A')
+            y = (x + shift) % 26
+            ciphertext += chr(y + ord('A'))
+        else:
+            ciphertext += char
+    return ciphertext
+
+def caesar_decrypt(ciphertext, shift):
+    """Déchiffre le texte chiffré avec le chiffrement de César."""
+    ciphertext = ciphertext.upper()
+    plaintext = ""
+    for char in ciphertext:
+        if char.isalpha():
+            y = ord(char) - ord('A')
+            x = (y - shift) % 26
+            plaintext += chr(x + ord('A'))
+        else:
+            plaintext += char
+    return plaintext
+
+
 def caesar_menu():
     from TP1_classic.cryptanalysis import cesar
 
@@ -22,7 +49,7 @@ def caesar_menu():
                         print("Shift value must be between 1 and 25. Please try again.")
                 except ValueError:
                     print("Invalid input. Please enter a valid integer for the shift value.")
-            encrypted = cesar.encrypt(plaintext, shift)
+            encrypted = caesar_encrypt(plaintext, shift)
             print(f"Encrypted message: {encrypted}")
 
         elif choice == "2":
@@ -36,7 +63,7 @@ def caesar_menu():
                         print("Shift value must be between 1 and 25. Please try again.")
                 except ValueError:
                     print("Invalid input. Please enter a valid integer for the shift value.")
-            decrypted = cesar.decrypt(ciphertext, shift)
+            decrypted = caesar_decrypt(ciphertext, shift)
             print(f"Decrypted message: {decrypted}")
 
         elif choice == "3":

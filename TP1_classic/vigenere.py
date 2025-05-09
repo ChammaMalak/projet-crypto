@@ -5,9 +5,6 @@ Chaque lettre du message est chiffrée par une lettre de la clé répétée.
 Les caractères non alphabétiques sont conservés (espaces, ponctuation).
 """
 
-from ast import main
-
-
 def validate_key(key):
     """Vérifie que la clé contient uniquement des lettres."""
     if not key.isalpha():
@@ -66,19 +63,9 @@ def decrypt(ciphertext, key):
 
     return plaintext
 
+# Fonctions à utiliser depuis main.py
+def vigenere_encrypt(message, key):
+    return encrypt(message, key)
 
-# Exemple d'utilisation
-if __name__ == "__main__":
-    message = "ATTACK AT DAWN!"
-    key = "LEMON"
-
-    print("Message original :", message)
-    print("Clé :", key)
-
-    encrypted = encrypt(message, key)
-    print("Texte chiffré :", encrypted)
-
-    decrypted = decrypt(encrypted, key)
-    print("Texte déchiffré :", decrypted)
-if __name__ == "__main__":
-    main()
+def vigenere_decrypt(ciphertext, key):
+    return decrypt(ciphertext, key)
