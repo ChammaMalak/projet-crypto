@@ -1,12 +1,4 @@
-# playfair.py
-
-"""
-Chiffrement de Playfair
-------------------------
-Algorithme basé sur une matrice 5x5 générée à partir d'une clé.
-Chaque paire de lettres est chiffrée selon sa position dans la matrice.
-"""
-
+from ast import main
 import string
 
 def prepare_key(key):
@@ -22,7 +14,7 @@ def prepare_key(key):
     return [matrix[i:i+5] for i in range(0, 25, 5)]
 
 
-def format_plaintext(text):
+def format_plaintext(text, preserve_spaces=False):
     """Formate le texte clair : enlève les espaces, double lettres, et sépare par paires."""
     text = text.upper().replace('J', 'I')
     cleaned = ''
@@ -37,8 +29,13 @@ def format_plaintext(text):
         else:
             cleaned += a + b
             i += 2
-    if len(cleaned) % 2 != 0:
+    
+    # Optional space handling
+    if preserve_spaces:
+        cleaned = cleaned.replace('X', ' X ')  # For readability, replace X with space
+    elif len(cleaned) % 2 != 0:
         cleaned += 'X'
+
     return [cleaned[i:i+2] for i in range(0, len(cleaned), 2)]
 
 
@@ -80,27 +77,37 @@ def decrypt_pair(matrix, a, b):
         return matrix[row_a][col_b] + matrix[row_b][col_a]
 
 
-def encrypt(plaintext, key):
+def encrypt(plaintext, key, preserve_spaces=False):
     """Fonction principale de chiffrement Playfair."""
     matrix = prepare_key(key)
-    pairs = format_plaintext(plaintext)
+    pairs = format_plaintext(plaintext, preserve_spaces)
     return ''.join([encrypt_pair(matrix, a, b) for a, b in pairs])
 
 
-def decrypt(ciphertext, key):
+def decrypt(ciphertext, key, preserve_spaces=False):
     """Fonction principale de déchiffrement Playfair."""
     matrix = prepare_key(key)
     pairs = [ciphertext[i:i+2] for i in range(0, len(ciphertext), 2)]
-    return ''.join([decrypt_pair(matrix, a, b) for a, b in pairs])
+    decrypted_text = ''.join([decrypt_pair(matrix, a, b) for a, b in pairs])
+    
+    if preserve_spaces:
+        decrypted_text = decrypted_text.replace(' X ', ' ')  # Reverting X back to spaces
+    
+    return decrypted_text
 
 
 # Exemple
 if __name__ == "__main__":
     key = "MONARCHY"
-    message = "HELLO WORLD"
+    message = input("Enter message for encryption (only letters, no special characters): ")
+    
+    # Option to preserve spaces
+    preserve_spaces = input("Would you like to preserve spaces in the decrypted message? (yes/no): ").strip().lower() == 'yes'
 
-    encrypted = encrypt(message, key)
+    encrypted = encrypt(message, key, preserve_spaces)
     print("Texte chiffré :", encrypted)
 
-    decrypted = decrypt(encrypted, key)
+    decrypted = decrypt(encrypted, key, preserve_spaces)
     print("Texte déchiffré :", decrypted)
+if __name__ == "__main__":
+    main()

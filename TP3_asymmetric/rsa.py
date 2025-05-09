@@ -1,5 +1,3 @@
-# rsa_algo.py
-
 import random
 
 def gcd(a, b):
@@ -28,7 +26,8 @@ def mod_inverse(e, phi):
         return d + phi
 
 def is_prime(n):
-    if n <= 1: return False
+    if n <= 1:
+        return False
     for i in range(2, int(n**0.5)+1):
         if n % i == 0:
             return False
@@ -41,7 +40,7 @@ def generate_keypair(p, q):
         raise ValueError("p and q cannot be equal.")
 
     n = p * q
-    phi = (p-1) * (q-1)
+    phi = (p - 1) * (q - 1)
     e = random.randrange(2, phi)
 
     while gcd(e, phi) != 1:
@@ -52,24 +51,30 @@ def generate_keypair(p, q):
 
 def encrypt(pk, plaintext):
     key, n = pk
-    cipher = [pow(ord(char), key, n) for char in plaintext]
-    return cipher
+    return [pow(ord(char), key, n) for char in plaintext]
 
 def decrypt(pk, ciphertext):
     key, n = pk
-    plain = [chr(pow(char, key, n)) for char in ciphertext]
-    return ''.join(plain)
+    return ''.join([chr(pow(char, key, n)) for char in ciphertext])
 
-# Example usage
-if __name__ == "__main__":
+def main():
+    print("\n--- RSA Encryption/Decryption ---")
     p = 61
     q = 53
+    message = "HELLO"
+
+    print(f"Original Message: {message}")
     public, private = generate_keypair(p, q)
 
-    message = "HELLO"
-    print("Message:", message)
-    encrypted_msg = encrypt(public, message)
-    print("Encrypted:", encrypted_msg)
+    print("\nKeys:")
+    print("  Public Key:", public)
+    print("  Private Key:", private)
 
-    decrypted_msg = decrypt(private, encrypted_msg)
-    print("Decrypted:", decrypted_msg)
+    encrypted = encrypt(public, message)
+    print("\nEncrypted:", encrypted)
+
+    decrypted = decrypt(private, encrypted)
+    print("Decrypted:", decrypted)
+
+if __name__ == "__main__":
+    main()

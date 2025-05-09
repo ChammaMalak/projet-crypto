@@ -1,12 +1,4 @@
-# otp.py
-
-"""
-One-Time Pad (OTP)
-------------------
-Chiffrement par addition modulaire avec une clé aléatoire de même taille que le message.
-Sécurité parfaite si la clé respecte les conditions.
-"""
-
+from ast import main
 import random
 import string
 
@@ -15,9 +7,9 @@ def generate_random_key(length):
     return ''.join(random.choice(string.ascii_uppercase) for _ in range(length))
 
 
-def encrypt(plaintext, key):
+def encrypt(plaintext, key, preserve_spaces=False):
     """Chiffre le message avec la clé par addition mod 26 (lettres A-Z)."""
-    plaintext = plaintext.upper().replace(" ", "")
+    plaintext = plaintext.upper().replace(" ", "") if not preserve_spaces else plaintext.upper()
     ciphertext = ""
 
     for p, k in zip(plaintext, key):
@@ -29,7 +21,7 @@ def encrypt(plaintext, key):
     return ciphertext
 
 
-def decrypt(ciphertext, key):
+def decrypt(ciphertext, key, preserve_spaces=False):
     """Déchiffre le message chiffré avec la clé (soustraction mod 26)."""
     plaintext = ""
 
@@ -44,14 +36,20 @@ def decrypt(ciphertext, key):
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    message = "CRYPTOGRAPHY"
-    key = generate_random_key(len(message))
+    message = input("Enter the message to encrypt (no spaces allowed for OTP): ")
+    preserve_spaces = input("Would you like to preserve spaces (yes/no)? ").lower() == 'yes'
+    
+    if len(message) == 0:
+        print("Message cannot be empty!")
+    else:
+        key = generate_random_key(len(message))
+        print(f"Message original: {message}")
+        print(f"Random key: {key}")
 
-    print("Message original :", message)
-    print("Clé aléatoire     :", key)
+        encrypted = encrypt(message, key, preserve_spaces)
+        print(f"Encrypted message: {encrypted}")
 
-    encrypted = encrypt(message, key)
-    print("Texte chiffré     :", encrypted)
-
-    decrypted = decrypt(encrypted, key)
-    print("Texte déchiffré   :", decrypted)
+        decrypted = decrypt(encrypted, key, preserve_spaces)
+        print(f"Decrypted message: {decrypted}")
+if __name__ == "__main__":
+    main()

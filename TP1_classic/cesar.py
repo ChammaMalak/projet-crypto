@@ -1,49 +1,48 @@
-# cesar.py
+from ast import main
 
-"""
-Chiffrement de César
---------------------
-Algorithme de chiffrement monoalphabétique basé sur un décalage fixe des lettres.
-"""
 
-def encrypt(plaintext, shift):
-    """
-    Chiffre le texte en décalant chaque lettre de 'shift' positions vers la droite.
-    
-    :param plaintext: Le texte à chiffrer (str)
-    :param shift: Le décalage (int)
-    :return: Le texte chiffré (str)
-    """
-    ciphertext = ""
-    for char in plaintext:
-        if char.isalpha():
-            base = ord('A') if char.isupper() else ord('a')
-            # Décalage circulaire dans l'alphabet
-            shifted = (ord(char) - base + shift) % 26 + base
-            ciphertext += chr(shifted)
+def caesar_menu():
+    from TP1_classic.cryptanalysis import cesar
+
+    while True:
+        print("\n--- Caesar Cipher ---")
+        print("1. Encrypt message")
+        print("2. Decrypt message")
+        print("3. Back to previous menu")
+        choice = input("Choose an option (1-3): ")
+
+        if choice == "1":
+            plaintext = input("Enter the plaintext: ")
+            while True:
+                try:
+                    shift = int(input("Enter the shift value (1-25): "))
+                    if 1 <= shift <= 25:
+                        break
+                    else:
+                        print("Shift value must be between 1 and 25. Please try again.")
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer for the shift value.")
+            encrypted = cesar.encrypt(plaintext, shift)
+            print(f"Encrypted message: {encrypted}")
+
+        elif choice == "2":
+            ciphertext = input("Enter the ciphertext: ")
+            while True:
+                try:
+                    shift = int(input("Enter the shift value (1-25): "))
+                    if 1 <= shift <= 25:
+                        break
+                    else:
+                        print("Shift value must be between 1 and 25. Please try again.")
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer for the shift value.")
+            decrypted = cesar.decrypt(ciphertext, shift)
+            print(f"Decrypted message: {decrypted}")
+
+        elif choice == "3":
+            break
+
         else:
-            ciphertext += char  # On garde les caractères non-alphabétiques (espaces, ponctuation...)
-    return ciphertext
-
-
-def decrypt(ciphertext, shift):
-    """
-    Déchiffre le texte en inversant le décalage.
-    
-    :param ciphertext: Le texte chiffré (str)
-    :param shift: Le décalage utilisé lors du chiffrement (int)
-    :return: Le texte déchiffré (str)
-    """
-    return encrypt(ciphertext, -shift)  # Déchiffrer = chiffrer avec décalage négatif
-
-
-# Exemple d'utilisation
+            print("Invalid option. Please try again.")
 if __name__ == "__main__":
-    message = "Bonjour le mone !"
-    decalage = 3
-
-    chiffre = encrypt(message, decalage)
-    print("Texte chiffré :", chiffre)
-
-    dechiffre = decrypt(chiffre, decalage)
-    print("Texte déchiffré :", dechiffre)
+    main()

@@ -1,38 +1,42 @@
-# kasiski.py
-
 """
-Examen de Kasiski pour casser un chiffre de Vigenère en trouvant la longueur de la clé.
+Examen de Kasiski pour un texte chiffré.
+Cette méthode est utilisée pour casser des chiffres comme Vigenère.
 """
 
 import re
-from collections import defaultdict
 
 def kasiski_examination(ciphertext):
     """
-    Applique l'examen de Kasiski pour trouver la longueur de la clé du chiffre de Vigenère.
+    Effectue l'examen de Kasiski sur un texte chiffré.
+    Trouve les répétitions de séquences de caractères et calcule les distances entre elles.
     """
-    # Filtrer les caractères non alphabétiques et convertir en majuscules
-    ciphertext = ''.join([char for char in ciphertext.upper() if char.isalpha()])
-    
-    # Dictionnaire pour stocker les positions des répétitions de séquences
-    sequences = defaultdict(list)
-    
-    # Trouver les répétitions de séquences de 3 lettres
-    for i in range(len(ciphertext) - 2):
-        seq = ciphertext[i:i+3]
-        sequences[seq].append(i)
-    
-    # Calculer les distances entre les répétitions
+    # Trouver les séquences répétées dans le texte chiffré
+    sequences = {}
+    for i in range(len(ciphertext) - 2):  # Examiner des séquences de 3 caractères
+        sequence = ciphertext[i:i+3]
+        if sequence in sequences:
+            sequences[sequence].append(i)
+        else:
+            sequences[sequence] = [i]
+
+    # Calculer les distances entre les répétitions de séquences
     distances = []
-    for seq, positions in sequences.items():
-        if len(positions) > 1:
+    for sequence, positions in sequences.items():
+        if len(positions) > 1:  # On ne prend en compte que les séquences répétées
             for i in range(1, len(positions)):
-                distances.append(positions[i] - positions[i - 1])
-    
+                distance = positions[i] - positions[i-1]
+                distances.append(distance)
+
     return distances
 
-# Exemple d'utilisation
-if __name__ == "__main__":
-    ciphertext = "AAXXYAAWYYZABXAXY"
+def main():
+    print("\n--- Kasiski Examination ---")
+    ciphertext = input("Enter the ciphertext to perform Kasiski examination: ")
+    
+    # Effectuer l'examen de Kasiski
     distances = kasiski_examination(ciphertext)
-    print(f"Distances entre les répétitions : {distances}")
+    print(f"Distances between repetitions: {distances}")
+
+# Exemple d'utilisation (sera ignoré si le module est importé)
+if __name__ == "__main__":
+    main()

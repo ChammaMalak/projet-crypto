@@ -1,5 +1,3 @@
-# frequency_analysis.py
-
 """
 Analyse de fréquence des lettres dans un texte chiffré.
 Cette méthode est utilisée pour casser les chiffres mono-alphabétiques comme César et Substitution.
@@ -44,10 +42,24 @@ def compare_frequency(frequencies):
     
     return diff
 
-# Exemple d'utilisation
-if __name__ == "__main__":
-    ciphertext = "WKH QXFN IHPXQ"
+def main():
+    print("\n--- Frequency Analysis ---")
+    ciphertext = input("Enter the ciphertext to analyze: ")
+    
+    # Analyse de la fréquence
     frequencies = analyze_frequency(ciphertext)
     print(f"Fréquences analysées : {frequencies}")
+    
+    # Comparaison avec les fréquences anglaises
     diff = compare_frequency(frequencies)
     print(f"Différence avec la fréquence anglaise : {diff}")
+    
+    # Déterminer si le texte est probablement chiffré avec un chiffre mono-alphabétique
+    if diff < 5:  # Seuil arbitraire pour déterminer si le texte est probablement chiffré de manière mono-alphabétique
+        print("Le texte est probablement chiffré avec un chiffre mono-alphabétique.")
+    else:
+        print("Le texte n'est probablement pas chiffré avec un chiffre mono-alphabétique.")
+
+# Exemple d'utilisation (sera ignoré si le module est importé)
+if __name__ == "__main__":
+    main()

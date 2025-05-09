@@ -1,11 +1,4 @@
-# hill.py
-
-"""
-Chiffrement de Hill
---------------------
-Algorithme basé sur l'algèbre linéaire : vecteurs * matrice clé mod 26.
-"""
-
+from ast import main
 import numpy as np
 
 def mod_inverse_matrix(matrix, modulus):
@@ -13,7 +6,9 @@ def mod_inverse_matrix(matrix, modulus):
     Calcule l'inverse d'une matrice modulo 26 (nécessaire pour le déchiffrement).
     """
     det = int(round(np.linalg.det(matrix)))
-    det_inv = pow(det, -1, modulus)
+    det_inv = pow(det, -1, modulus)  # Calculate modular inverse of determinant
+    if det_inv == 0:
+        raise ValueError("La matrice clé n'est pas inversible modulo 26.")
     matrix_mod_inv = (
         det_inv * np.round(det * np.linalg.inv(matrix)).astype(int) % modulus
     )
@@ -30,11 +25,11 @@ def numbers_to_text(numbers):
     return ''.join([chr(num % 26 + ord('A')) for num in numbers])
 
 
-def pad_text(text, block_size):
-    """Ajoute des 'X' à la fin si le texte n'est pas un multiple de la taille du bloc."""
+def pad_text(text, block_size, pad_char='X'):
+    """Ajoute des caractères de padding à la fin si le texte n'est pas un multiple de la taille du bloc."""
     text = ''.join([char for char in text.upper() if char.isalpha()])
     while len(text) % block_size != 0:
-        text += 'X'
+        text += pad_char
     return text
 
 
@@ -63,7 +58,10 @@ def decrypt(ciphertext, key_matrix):
     numbers = text_to_numbers(ciphertext)
     plaintext = []
 
-    inverse_key = mod_inverse_matrix(key_matrix, 26)
+    try:
+        inverse_key = mod_inverse_matrix(key_matrix, 26)
+    except ValueError as e:
+        return str(e)
 
     for i in range(0, len(numbers), block_size):
         block = np.array(numbers[i:i+block_size])
@@ -84,3 +82,6 @@ if __name__ == "__main__":
 
     decrypted = decrypt(encrypted, key)
     print("Texte déchiffré :", decrypted)
+
+if __name__ == "__main__":
+    main()

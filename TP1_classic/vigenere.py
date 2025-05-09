@@ -1,55 +1,84 @@
-# vigenere.py
-
 """
 Chiffrement de Vigenère
 -------------------------
 Chaque lettre du message est chiffrée par une lettre de la clé répétée.
-Ex : clé = LEMON, message = ATTACK => chiffrement lettre par lettre.
+Les caractères non alphabétiques sont conservés (espaces, ponctuation).
 """
 
+from ast import main
+
+
+def validate_key(key):
+    """Vérifie que la clé contient uniquement des lettres."""
+    if not key.isalpha():
+        raise ValueError("La clé doit contenir uniquement des lettres.")
+
 def repeat_key(key, length):
-    """Répète ou tronque la clé pour qu'elle ait la même taille que le message."""
+    """Répète ou tronque la clé pour qu'elle ait la même taille que le message (lettres seulement)."""
     key = key.upper()
     return (key * (length // len(key) + 1))[:length]
 
 def encrypt(plaintext, key):
     """
     Chiffre le texte clair avec l'algorithme de Vigenère.
+    Garde les caractères non alphabétiques (espaces, ponctuation).
     """
-    plaintext = ''.join([char for char in plaintext.upper() if char.isalpha()])
-    key = repeat_key(key, len(plaintext))
+    validate_key(key)
+    plaintext = plaintext.upper()
+    key = repeat_key(key, sum(c.isalpha() for c in plaintext))
 
     ciphertext = ''
-    for p, k in zip(plaintext, key):
-        # (position lettre + position clé) % 26
-        encrypted_char = chr((ord(p) - ord('A') + ord(k) - ord('A')) % 26 + ord('A'))
-        ciphertext += encrypted_char
+    key_index = 0
+
+    for char in plaintext:
+        if char.isalpha():
+            p = ord(char) - ord('A')
+            k = ord(key[key_index]) - ord('A')
+            encrypted_char = chr((p + k) % 26 + ord('A'))
+            ciphertext += encrypted_char
+            key_index += 1
+        else:
+            ciphertext += char  # Conserver les caractères non alphabétiques
 
     return ciphertext
 
 def decrypt(ciphertext, key):
     """
     Déchiffre un texte chiffré avec l'algorithme de Vigenère.
+    Garde les caractères non alphabétiques (espaces, ponctuation).
     """
-    ciphertext = ''.join([char for char in ciphertext.upper() if char.isalpha()])
-    key = repeat_key(key, len(ciphertext))
+    validate_key(key)
+    ciphertext = ciphertext.upper()
+    key = repeat_key(key, sum(c.isalpha() for c in ciphertext))
 
     plaintext = ''
-    for c, k in zip(ciphertext, key):
-        # (position lettre - position clé + 26) % 26
-        decrypted_char = chr((ord(c) - ord('A') - (ord(k) - ord('A')) + 26) % 26 + ord('A'))
-        plaintext += decrypted_char
+    key_index = 0
+
+    for char in ciphertext:
+        if char.isalpha():
+            c = ord(char) - ord('A')
+            k = ord(key[key_index]) - ord('A')
+            decrypted_char = chr((c - k + 26) % 26 + ord('A'))
+            plaintext += decrypted_char
+            key_index += 1
+        else:
+            plaintext += char  # Conserver les caractères non alphabétiques
 
     return plaintext
 
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    message = "ATTACKATDAWN"
+    message = "ATTACK AT DAWN!"
     key = "LEMON"
 
+    print("Message original :", message)
+    print("Clé :", key)
+
     encrypted = encrypt(message, key)
-    print("Texte chiffré :", encrypted)  # Exemple : LXFOPVEFRNHR
+    print("Texte chiffré :", encrypted)
 
     decrypted = decrypt(encrypted, key)
-    print("Texte déchiffré :", decrypted)  # ATTACKATDAWN
+    print("Texte déchiffré :", decrypted)
+if __name__ == "__main__":
+    main()
