@@ -17,17 +17,16 @@ def analyze_frequency(ciphertext):
     """
     Analyse la fréquence des lettres dans un texte chiffré et compare avec la fréquence attendue en anglais.
     """
-    # Filtrer les caractères non alphabétiques et convertir en majuscules
     ciphertext = ''.join([char for char in ciphertext.upper() if char in string.ascii_uppercase])
-    
-    # Compter les occurrences des lettres dans le texte chiffré
     letter_counts = Counter(ciphertext)
-    
-    # Calculer la fréquence de chaque lettre
     total_letters = sum(letter_counts.values())
+    if total_letters == 0:
+        return {}
     frequencies = {char: letter_counts[char] / total_letters * 100 for char in letter_counts}
-    
     return frequencies
+
+def frequency_analysis(text):
+    return analyze_frequency(text)
 
 def compare_frequency(frequencies):
     """
