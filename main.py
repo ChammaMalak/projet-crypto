@@ -1,5 +1,5 @@
 import importlib
-
+import numpy as np
 # TP1 - Classical Ciphers
 from TP1_classic import affine, cesar, hill, otp, playfair, substitution, vigenere
 from TP1_classic.cryptanalysis import frequency_analysis, index_of_coincidence, kasiski
@@ -10,12 +10,18 @@ from TP2_symmetric import aes, des, rc4
 # TP3 - Asymmetric Ciphers
 from TP3_asymmetric import diffie_hellman, elgamal, rsa
 
+# TP4 - Signatures and Hash Functions
+import hashlib
+from TP4_hash_and_signature import signature_rsa, signature_elgamal
+
 def main():
     while True:
         print("\n=== Crypto Project Menu ===")
         print("1. Classical Algorithms")
         print("2. Symmetric Algorithms")
         print("3. Asymmetric Algorithms")
+        print("4. Signatures")
+        print("5. Hash Functions")
         print("0. Exit")
         choice = input("Choose a category: ")
 
@@ -25,11 +31,70 @@ def main():
             symmetric_menu()
         elif choice == '3':
             asymmetric_menu()
+        elif choice == '4':
+            signature_menu()
+        elif choice == '5':
+            hash_menu()
         elif choice == '0':
             print("Exiting...")
             break
         else:
             print("Invalid choice.")
+
+def signature_menu():
+    print("\n-- Signature Menu --")
+    print("1. RSA Signature")
+    print("2. ElGamal Signature")
+    choice = input("Choose signature method: ")
+
+    msg = input("Enter the message to sign: ")
+
+    if choice == '1':
+        try:
+            # Génération des clés RSA (n, e, d)
+            n, e, d = signature_rsa.generate_keys()
+            signature = signature_rsa.sign_message(msg, d, n)
+            print(f"Signature (RSA): {signature}")
+            valid = signature_rsa.verify_signature(msg, signature, e, n)
+            print(f"Signature verification: {'valid' if valid else 'invalid'}")
+        except Exception as e:
+            print("RSA signature error:", e)
+
+    elif choice == '2':
+        try:
+            # Génération des clés ElGamal (p, alpha, x, y)
+            p, alpha, x, y = signature_elgamal.eg_key_generation()
+            signature = signature_elgamal.sign_message(msg, p, alpha, x)  # signature = (r, s)
+            print(f"Signature (ElGamal): r={signature[0]}, s={signature[1]}")
+            valid = signature_elgamal.verify_signature(msg, p, alpha, y, signature[0], signature[1])
+            print(f"Signature verification: {'valid' if valid else 'invalid'}")
+        except Exception as e:
+            print("ElGamal signature error:", e)
+    else:
+        print("Invalid choice.")
+
+def hash_menu():
+    print("\n-- Hash Functions Menu --")
+    print("1. MD5")
+    print("2. SHA1")
+    print("3. SHA256")
+    print("4. SHA3_256")
+    choice = input("Choose hash function: ")
+    msg = input("Enter the message to hash: ").encode()
+
+    if choice == '1':
+        h = hashlib.md5(msg).hexdigest()
+    elif choice == '2':
+        h = hashlib.sha1(msg).hexdigest()
+    elif choice == '3':
+        h = hashlib.sha256(msg).hexdigest()
+    elif choice == '4':
+        h = hashlib.sha3_256(msg).hexdigest()
+    else:
+        print("Invalid choice.")
+        return
+
+    print(f"Hash: {h}")
 
 def classical_menu():
     print("\n-- Classical Algorithms --")
