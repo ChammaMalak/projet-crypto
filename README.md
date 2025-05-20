@@ -134,10 +134,18 @@ python client2.py
 
 ## 🧰 Optional: GUI
 
-If `gui.py` and `main.py` are connected to algorithm execution:
+The GUI (`gui.py`) provides access to all algorithms and tools in a user-friendly interface:
+
+- **Classical, Symmetric, and Asymmetric Algorithms:** All available from the main menu.
+- **Signatures:** RSA and ElGamal signature with option to enter your own keys or generate random ones.
+- **Hash Functions:** MD5, SHA1, SHA256, SHA3_256 hashing menu.
+- **Cryptanalysis Tools:** Frequency analysis, index of coincidence, and Kasiski method.
+- **Dark Mode:** The GUI uses a modern dark theme by default.
+
+To launch the GUI:
 
 ```bash
-python main.py
+python [gui.py](http://_vscodecontentref_/4)
 ```
 
 ---
