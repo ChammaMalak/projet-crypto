@@ -51,8 +51,14 @@ def signature_menu():
 
     if choice == '1':
         try:
-            # Génération des clés RSA (n, e, d)
-            n, e, d = signature_rsa.generate_keys()
+            use_custom = input("Entrer vos propres clés ? (o/n, défaut n): ").lower() == 'o'
+            if use_custom:
+                n = int(input("Entrer n: "))
+                e = int(input("Entrer e: "))
+                d = int(input("Entrer d: "))
+            else:
+                n, e, d = signature_rsa.generate_keys()
+                print(f"Clés générées : n={n}, e={e}, d={d}")
             signature = signature_rsa.sign_message(msg, d, n)
             print(f"Signature (RSA): {signature}")
             valid = signature_rsa.verify_signature(msg, signature, e, n)
@@ -62,8 +68,15 @@ def signature_menu():
 
     elif choice == '2':
         try:
-            # Génération des clés ElGamal (p, alpha, x, y)
-            p, alpha, x, y = signature_elgamal.eg_key_generation()
+            use_custom = input("Entrer vos propres clés ? (o/n, défaut n): ").lower() == 'o'
+            if use_custom:
+                p = int(input("Entrer p: "))
+                alpha = int(input("Entrer alpha: "))
+                x = int(input("Entrer x (privée): "))
+                y = pow(alpha, x, p)
+            else:
+                p, alpha, x, y = signature_elgamal.eg_key_generation()
+                print(f"Clés générées : p={p}, alpha={alpha}, x={x}, y={y}")
             signature = signature_elgamal.sign_message(msg, p, alpha, x)  # signature = (r, s)
             print(f"Signature (ElGamal): r={signature[0]}, s={signature[1]}")
             valid = signature_elgamal.verify_signature(msg, p, alpha, y, signature[0], signature[1])
