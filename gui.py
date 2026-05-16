@@ -112,10 +112,10 @@ def show_cesar_menu():
             text = text_entry.get()
             shift = int(shift_entry.get())
             if action_var.get() == 'e':
-                result = cesar.caesar_encrypt(text, shift)
+                result = cesar.cesar_encrypt(text, shift)
                 result_label.config(text=f"Ciphertext: {result}")
             else:
-                result = cesar.caesar_decrypt(text, shift)
+                result = cesar.cesar_decrypt(text, shift)
                 result_label.config(text=f"Plaintext: {result}")
         except Exception as e:
             messagebox.showerror("Error", str(e))
@@ -316,25 +316,48 @@ def show_frequency_analysis_menu():
     clear_frame(main_frame)
     ttk.Label(main_frame, text="Frequency Analysis", font=("Helvetica", 14), style="Dark.TLabel").pack(pady=10)
 
-    ttk.Label(main_frame, text="Text:", style="Dark.TLabel").pack()
-    text_entry = ttk.Entry(main_frame, width=50)
-    text_entry.pack()
+    ttk.Label(main_frame, text="Paste your ciphertext here:", style="Dark.TLabel").pack()
+    
+    # Utilisation de tk.Text pour le multiligne (mieux pour les longs textes)
+    text_area = tk.Text(main_frame, width=60, height=8, bg="#222222", fg="#EEEEEE", insertbackground="white")
+    text_area.pack(pady=5)
 
-    result_label = ttk.Label(main_frame, text="", wraplength=600, style="Dark.TLabel")
+    # Zone d'affichage des résultats avec une police à largeur fixe (monospace)
+    result_label = ttk.Label(main_frame, text="", wraplength=600, style="Dark.TLabel", font=("Courier", 10))
     result_label.pack(pady=10)
 
     def run_frequency():
         try:
-            text = text_entry.get()
+            # Récupérer le texte (du début à la fin)
+            text = text_area.get("1.0", tk.END).strip()
+            if not text:
+                messagebox.showwarning("Empty", "Please enter some text to analyze.")
+                return
+            
+            # Appel de ton module de calcul
             result = frequency_analysis.analyze_frequency(text)
-            # Format result as a string for display
-            result_str = "\n".join(f"{char}: {freq:.2f}%" for char, freq in result.items())
-            result_label.config(text=result_str)
+            
+            # --- CORRECTION : TRI PAR FRÉQUENCE DÉCROISSANTE ---
+            sorted_result = sorted(result.items(), key=lambda item: item[1], reverse=True)
+            
+            # Formatage propre : 4 lettres par ligne pour la lisibilité
+            lines = []
+            current_line = []
+            for i, (char, freq) in enumerate(sorted_result):
+                current_line.append(f"{char}: {freq:>5.2f}%")
+                if (i + 1) % 4 == 0:
+                    lines.append("  |  ".join(current_line))
+                    current_line = []
+            if current_line:
+                lines.append("  |  ".join(current_line))
+                
+            result_label.config(text="\n".join(lines))
+            
         except Exception as e:
-            messagebox.showerror("Error", str(e))
+            messagebox.showerror("Error", f"Analysis failed: {str(e)}")
 
-    ttk.Button(main_frame, text="Run", command=run_frequency, style="Dark.TButton").pack(pady=10)
-    ttk.Button(main_frame, text="Back", command=show_classical_menu, style="Dark.TButton").pack()
+    ttk.Button(main_frame, text="Run Analysis", command=run_frequency, style="Dark.TButton").pack(pady=5)
+    ttk.Button(main_frame, text="Back", command=show_classical_menu, style="Dark.TButton").pack(pady=5)
 
 def show_index_of_coincidence_menu():
     clear_frame(main_frame)

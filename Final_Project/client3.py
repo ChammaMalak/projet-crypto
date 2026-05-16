@@ -22,7 +22,7 @@ g = 5
 private_key = getrandbits(256)
 public_key = pow(g, private_key, p)
 
-HOST = '192.168.100.5'
+HOST = '127.0.0.1'
 PORT = 12345
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -39,7 +39,7 @@ shared_key = pow(server_pub, private_key, p)
 aes_key = shared_key.to_bytes(16, 'big')[:16]
 print(f"[Client] Clé AES dérivée: {aes_key.hex()}")
 
-# ---------------------- RÉCEPTION DE LA CLÉ PUBLIQUE RSA SERVEUR ----------------------
+# RÉCEPTION DE LA CLÉ PUBLIQUE RSA SERVEUR 
 key_length_bytes = recv_all(client_socket, 4)
 key_length = int.from_bytes(key_length_bytes, 'big')
 rsa_data = recv_all(client_socket, key_length)
@@ -72,7 +72,7 @@ while True:
         client_socket.sendall(len(pubkey_bytes).to_bytes(4, 'big'))
         client_socket.sendall(pubkey_bytes)
 
-        # ---------------------- RÉCEPTION RÉPONSE ----------------------
+        # RÉCEPTION RÉPONSE 
         print("[Client] En attente de la réponse...")
 
         response_iv = recv_all(client_socket, 16)

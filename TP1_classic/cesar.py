@@ -1,7 +1,4 @@
-from ast import main
-
-
-def caesar_encrypt(plaintext, shift):
+def cesar_encrypt(plaintext, shift):
     """Chiffre le texte clair avec le chiffrement de César."""
     plaintext = plaintext.upper()
     ciphertext = ""
@@ -14,7 +11,7 @@ def caesar_encrypt(plaintext, shift):
             ciphertext += char
     return ciphertext
 
-def caesar_decrypt(ciphertext, shift):
+def cesar_decrypt(ciphertext, shift):
     """Déchiffre le texte chiffré avec le chiffrement de César."""
     ciphertext = ciphertext.upper()
     plaintext = ""
@@ -27,12 +24,9 @@ def caesar_decrypt(ciphertext, shift):
             plaintext += char
     return plaintext
 
-
-def caesar_menu():
-    from TP1_classic.cryptanalysis import cesar
-
+def cesar_menu():
     while True:
-        print("\n--- Caesar Cipher ---")
+        print("\n--- Cesar Cipher ---")
         print("1. Encrypt message")
         print("2. Decrypt message")
         print("3. Back to previous menu")
@@ -46,10 +40,11 @@ def caesar_menu():
                     if 1 <= shift <= 25:
                         break
                     else:
-                        print("Shift value must be between 1 and 25. Please try again.")
+                        print("Shift value must be between 1 and 25.")
                 except ValueError:
-                    print("Invalid input. Please enter a valid integer for the shift value.")
-            encrypted = caesar_encrypt(plaintext, shift)
+                    print("Invalid input. Please enter an integer.")
+            
+            encrypted = cesar_encrypt(plaintext, shift)
             print(f"Encrypted message: {encrypted}")
 
         elif choice == "2":
@@ -60,16 +55,17 @@ def caesar_menu():
                     if 1 <= shift <= 25:
                         break
                     else:
-                        print("Shift value must be between 1 and 25. Please try again.")
+                        print("Shift value must be between 1 and 25.")
                 except ValueError:
-                    print("Invalid input. Please enter a valid integer for the shift value.")
-            decrypted = caesar_decrypt(ciphertext, shift)
+                    print("Invalid input.")
+            
+            decrypted = cesar_decrypt(ciphertext, shift)
             print(f"Decrypted message: {decrypted}")
 
         elif choice == "3":
             break
-
         else:
-            print("Invalid option. Please try again.")
+            print("Invalid option.")
+
 if __name__ == "__main__":
-    main()
+    cesar_menu()

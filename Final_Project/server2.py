@@ -1,4 +1,4 @@
-# server2.py (bidirectional AES communication)
+# (bidirectional AES communication)
 import socket
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad

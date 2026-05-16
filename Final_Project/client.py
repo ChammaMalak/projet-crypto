@@ -1,4 +1,4 @@
-#  client.py (bidirectional caesar communication)
+#(bidirectional caesar communication)
 import socket
 import threading
 
@@ -27,7 +27,7 @@ def receive_messages(sock, key):
         except:
             break
 
-HOST = '192.168.100.137'  # Replace with your PC's IP
+HOST = '127.0.0.1'
 PORT = 12345
 KEY = 3
 

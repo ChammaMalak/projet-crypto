@@ -1,4 +1,4 @@
-#  server.py (bidirectional caesar communication)
+# (bidirectional caesar communication)
 import socket
 import threading
 

@@ -21,8 +21,9 @@ def recv_all(sock, length):
 p = 23
 g = 5
 
-HOST = '192.168.100.5'  # IP du serveur
+HOST = '0.0.0.0'
 PORT = 12345
+
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((HOST, PORT))
@@ -33,7 +34,7 @@ conn, addr = server_socket.accept()
 print(f"[+] Connected by {addr}")
 
 try:
-    # Clé privée/publique DH serveur
+    # Clé privee/publique DH serveur
     private_key = getrandbits(256)
     public_key = pow(g, private_key, p)
 

@@ -350,13 +350,13 @@ def symmetric_menu():
         if action == 'e':
             plaintext = input("Enter the plaintext: ")
             encrypted = rc4.rc4_encrypt(key, plaintext)
-            print("Encrypted (hex):", encrypted.hex())
+            print(f"Encrypted (hex): {encrypted.hex()}")
         elif action == 'd':
             hex_input = input("Enter the ciphertext (hex): ")
             try:
-                ciphertext = bytes.fromhex(hex_input)
-                decrypted = rc4.rc4_decrypt(key, ciphertext)
-                print("Decrypted text:", decrypted.decode('latin1'))
+                hex_input  = bytes.fromhex(hex_input)
+                decrypted = rc4.rc4_decrypt(key, hex_input)
+                print(f"Decrypted text: {decrypted}")
             except Exception as e:
                 print("Decryption failed:", e)
         else:
